@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Einstein Bulinda" />
+    <title>Digital Clock</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="digital-clock">
+      <div class="time" data-time></div>
+    </div>
+    <script>
+      function setClock() {
+        let date = new Date();
+        let hour = date.getHours();
+        let minutes = formatMinutes();
+        let seconds = formatSeconds();
+        document.querySelector(
+          "[data-time]"
+        ).innerText = `${hour} : ${minutes} : ${seconds}`;
+
+        function formatMinutes() {
+          let minutes = new Date().getMinutes();
+          return minutes < 10 ? `0${minutes.toString()}` : minutes.toString();
+        }
+        function formatSeconds() {
+          let seconds = new Date().getSeconds();
+          return seconds < 10 ? `0${seconds.toString()}` : seconds.toString();
+        }
+
+        setInterval(setClock, 1000);
+      }
+
+      setClock();
+    </script>
+  </body>
+</html>

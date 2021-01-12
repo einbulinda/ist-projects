@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Indie+Flower&family=Monoton&family=Philosopher&display=swap");
+/* 
+    font-family: 'Indie Flower', cursive;
+    font-family: 'Monoton', cursive; 
+    font-family: 'Philosopher', sans-serif;
+*/
+body {
+  text-transform: uppercase;
+}
+h1 {
+  font-family: "Bungee Shade", cursive;
+  color: #182b3a;
+}
+h2,
+h4,
+p,
+label {
+  font-family: "Indie Flower", cursive;
+  font-weight: bold;
+}
+h4 {
+  color: #20a4f3;
+}
+h2 {
+  color: cyan;
+}
+.time-container {
+  width: 470px;
+  height: 610px;
+  border: 1px solid cyan;
+  margin: 0 auto;
+  box-sizing: border-box;
+  border-radius: 12px;
+  padding: 2px;
+  background-color: #ffa69e;
+  background-image: linear-gradient(315deg, #ffa69e 0%, #5d4954 74%);
+}
+.img-container {
+  position: relative;
+  width: 300px;
+  height: 250px;
+  margin: 0 auto;
+}
+img {
+  border-radius: 8px;
+  border: 4px solid #20a4f3;
+}
+.img-container p {
+  position: absolute;
+  padding: 5px;
+  padding-left: 10px;
+  bottom: 8px;
+  font-size: 20px;
+  font-weight: bolder;
+  color: rgb(31, 236, 185);
+}
+.time-sets {
+  margin: 15px auto;
+  width: 250px;
+  font-style: italic;
+}
+button.btn-custom {
+  background-color: #182b3a;
+  background-image: linear-gradient(315deg, #182b3a 0%, #20a4f3 74%);
+  color: aliceblue;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-style: italic;
+  font-family: "Philosopher", sans-serif;
+  transition: all 0.5s;
+}
+button.btn-custom:hover {
+  color: #20a4f3;
+  background-color: #000000;
+  background-image: linear-gradient(315deg, #000000 0%, #b82e1f 74%);
+}
+p {
+  color: #182b3a;
+}

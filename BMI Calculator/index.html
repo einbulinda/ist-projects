@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Einstein Bulinda" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+      crossorigin="anonymous"
+    />
+    <!-- JavaScript Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>BMI Calculator</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="text-center">Units Type</h3>
+            <div class="text-center">
+              <button
+                class="button btn-secondary"
+                id="ukUnits"
+                onclick="toUkUnits()"
+              >
+                US/UK Units
+              </button>
+              <button
+                class="button btn-secondary"
+                id="metricUnits"
+                onclick="toMetricUnits()"
+              >
+                Metric Units
+              </button>
+            </div>
+            <h3 class="text-center">Height</h3>
+            <div class="d-inline-flex" id="h_Uk">
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="heightFt"
+                  onkeyup="convFtToMtrs()"
+                  placeholder="feet"
+                  aria-label="height"
+                  aria-describedby="basic-addon2"
+                />
+                <span class="input-group-text" id="heightLabel">ft</span>
+              </div>
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="heightIn"
+                  onkeyup="convFtToMtrs()"
+                  placeholder="inches"
+                  aria-label="heightDecimal"
+                  aria-describedby="basic-addon2"
+                />
+                <span class="input-group-text" id="decLabel">in</span>
+              </div>
+            </div>
+            <div class="d-none" id="h_Metric">
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="heightCm"
+                  placeholder="centimeters"
+                  aria-label="heightMetric"
+                  aria-describedby="basic-addon2"
+                />
+                <span class="input-group-text" id="metLabel">cm</span>
+              </div>
+            </div>
+            <h3 class="text-center">Weight</h3>
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                onkeyup="getWeight()"
+                id="wghtInput"
+                placeholder="pounds"
+                aria-label="pounds"
+                aria-describedby="basic-addon2"
+              />
+              <span class="input-group-text" id="wghtLabel">lb</span>
+            </div>
+            <div class="text-center">
+              <button
+                class="button btn-success"
+                onclick="calculateBmi(); classifyBmi();healthRisk()"
+              >
+                Calculate
+              </button>
+              <button class="button btn-danger px-4" onclick="clearValues()">
+                Reset
+              </button>
+            </div>
+            <h3 class="text-center">BMI</h3>
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="bmi"
+                readonly
+                aria-label="bmi"
+                aria-describedby="basic-addon2"
+              />
+              <span class="input-group-text" id="basic-addon2"
+                >kg/m<sup>2</sup></span
+              >
+            </div>
+            <h3 class="text-center">BMI Category</h3>
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="bmiCategory"
+                readonly
+                aria-label="bmi-category"
+                aria-describedby="basic-addon2"
+              />
+            </div>
+            <h3 class="text-center">Health Risk</h3>
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="healthRisk"
+                readonly
+                aria-label="health-risk"
+                aria-describedby="basic-addon2"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Switching to UK Units
+
+      function toUkUnits() {
+        var x = document.getElementById("h_Uk");
+        var y = document.getElementById("h_Metric");
+        var z = document.getElementById("wghtLabel");
+
+        if ((x.className = "d-none")) {
+          x.classList.remove("d-none");
+          x.classList.add("d-inline-flex");
+          y.classList.remove("d-block");
+          y.classList.add("d-none");
+          z.innerHTML = "lb";
+          document
+            .getElementById("wghtInput")
+            .setAttribute("placeholder", "Pounds");
+        }
+      }
+
+      // Switching to Metric Units
+      function toMetricUnits() {
+        var x = document.getElementById("h_Metric");
+        var y = document.getElementById("h_Uk");
+        var z = document.getElementById("wghtLabel");
+
+        if ((x.className = "d-none")) {
+          x.classList.remove("d-none");
+          x.classList.add("d-block");
+          y.classList.remove("d-block");
+          y.classList.add("d-none");
+          z.innerHTML = "kg";
+          document
+            .getElementById("wghtInput")
+            .setAttribute("placeholder", "Kilograms");
+        }
+      }
+      // Height Conversion to Metres
+      function convFtToMtrs() {
+        var feet = Number(document.getElementById("heightFt").value);
+        var inches = Number(document.getElementById("heightIn").value);
+        var centimeters = Number(document.getElementById("heightCm").value);
+        var height = Number(feet + "." + inches);
+        var metres = null;
+        if (height > 0) {
+          metres = height * 0.3048;
+        } else if (centimeters > 0) {
+          metres = centimeters * 0.01;
+        }
+        return metres;
+      }
+
+      // Weight conversion
+      function getWeight() {
+        var weight = Number(document.getElementById("wghtInput").value);
+        var label = document.getElementById("wghtLabel").innerHTML;
+        var kgs = null;
+        if (label === "lb") {
+          kgs = weight * 0.453592;
+        } else {
+          kgs = weight;
+        }
+        return kgs;
+      }
+
+      // Calculating BMI
+      function calculateBmi() {
+        var res = document.getElementById("bmi");
+        var height = Number(convFtToMtrs());
+        var mass = Number(getWeight());
+        const bmi = Math.round((mass / Math.pow(height, 2)) * 10) / 10;
+        res.value = bmi;
+        return bmi;
+      }
+
+      // Classification of BMI
+      function classifyBmi() {
+        var bmi = calculateBmi();
+        var res = document.getElementById("bmiCategory");
+        var category = "";
+        switch (true) {
+          case bmi < 18.5:
+            category = "Underweight";
+            break;
+          case bmi < 25:
+            category = "Normal";
+            break;
+          case bmi < 30:
+            category = "Overweight";
+            break;
+          case bmi >= 30:
+            category = "Obese";
+        }
+        res.value = category;
+        return category;
+      }
+
+      // Health Risk
+      function healthRisk() {
+        var bmi = classifyBmi();
+        var res = document.getElementById("healthRisk");
+        var msg = "";
+
+        switch (bmi) {
+          case "Underweight":
+            msg = "malnutrition, vitamin deficiencies, or anemia e.t.c";
+            break;
+          case "Normal":
+            msg = "you are in good health";
+            break;
+          case "Overweight":
+            msg = "type 2 Diabetes, High Blood Pressure";
+            break;
+          case "Obese":
+            msg = "abnormal cholesterol, high blood pressure, and strokes";
+        }
+        res.value = msg;
+      }
+
+      // Clear values
+      function clearValues() {
+        var feet = document.getElementById("heightFt");
+        var inches = document.getElementById("heightIn");
+        var centimeters = document.getElementById("heightCm");
+        var weight = document.getElementById("wghtInput");
+        var bmi = document.getElementById("bmi");
+        var category = document.getElementById("bmiCategory");
+        var health = document.getElementById("healthRisk");
+
+        feet.value = null;
+        inches.value = null;
+        centimeters.value = null;
+        weight.value = null;
+        bmi.value = null;
+        category.value = null;
+        health.value = null;
+      }
+    </script>
+  </body>
+</html>

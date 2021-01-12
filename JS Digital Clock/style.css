@@ -1,0 +1,19 @@
+.digital-clock {
+  display: flex;
+  padding: 20px;
+  font-size: 30px;
+  border: 1px solid red;
+  display: inline-block;
+  text-align: center;
+  background-color: black;
+  color: red;
+  border-radius: 9px;
+  box-sizing: border-box;
+  box-shadow: 4px 6px silver;
+}
+.time {
+  padding: 10px;
+  margin: 0px;
+  display: inline-block;
+  background-color: rgba(206, 86, 86, 0.4);
+}

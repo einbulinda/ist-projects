@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Einstein Bulinda" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+    <title>Arithmetic Calculator</title>
+  </head>
+  <body>
+    <div class="calc-grid">
+      <div class="output">
+        <div data-previous class="previous-operand"></div>
+        <div data-current class="current-operand"></div>
+      </div>
+      <button data-clear class="span-two">AC</button>
+      <button data-delete>DEL</button>
+      <button data-operation="">÷</button>
+      <button data-number="">7</button>
+      <button data-number>8</button>
+      <button data-number>9</button>
+      <button data-operation>×</button>
+      <button data-number>4</button>
+      <button data-number>5</button>
+      <button data-number>6</button>
+      <button data-operation>+</button>
+      <button data-number>1</button>
+      <button data-number>2</button>
+      <button data-number>3</button>
+      <button data-operation>-</button>
+      <button data-number>.</button>
+      <button data-number>0</button>
+      <button data-equals class="span-two">=</button>
+    </div>
+    <!-- The script to load after the page has completed loading -->
+    <script defer>
+      class Calculator {
+        constructor(previousTextElement, currentTextElement) {
+          this.previousTextElement = previousTextElement;
+          this.currentTextElement = currentTextElement;
+          this.clear();
+        }
+        // clear the screen and inputs that had been provided by the user
+        clear() {
+          this.currentOperand = "";
+          this.previousOperand = "";
+          this.operation = undefined;
+        }
+        // delete the last entry (of the current value)
+        delete() {
+          this.currentOperand = this.currentOperand.toString().slice(0, -1);
+        }
+
+        appendNumber(number) {
+          //   If a period has been input, don't add it again to number string
+          if (number === "." && this.currentOperand.includes(".")) return;
+          //append number to previous instead of adding
+          this.currentOperand =
+            this.currentOperand.toString() + number.toString();
+        }
+        selectOperand(operation) {
+          if (this.currentOperand === "") return; //not to add operand if no value is provided
+          if (this.previousOperand !== "") {
+            this.compute();
+          }
+          this.operation = operation;
+          this.previousOperand = this.currentOperand;
+          this.currentOperand = "";
+        }
+        // implementing calculator operations to values provided
+        compute() {
+          let computation;
+          const prev = parseFloat(this.previousOperand);
+          const current = parseFloat(this.currentOperand);
+          if (isNaN(prev) || isNaN(current)) return;
+          switch (this.operation) {
+            case "+":
+              computation = prev + current;
+              break;
+            case "-":
+              computation = prev - current;
+              break;
+            case "×":
+              computation = prev * current;
+              break;
+            case "÷":
+              computation = prev / current;
+              break;
+            default:
+              return;
+          }
+          this.currentOperand = computation;
+          this.operation = undefined;
+          this.previousOperand = "";
+        }
+
+        getDisplayNumber(number) {
+          //   converting the number to integer and decimals.
+          const stringNumber = number.toString();
+          const integerDigits = parseFloat(stringNumber.split(".")[0]);
+          const decimalDigits = stringNumber.split(".")[1];
+          let integerDisplay;
+          if (isNaN(integerDigits)) {
+            integerDisplay = "";
+          } else {
+            integerDisplay = integerDigits.toLocaleString("en", {
+              maximumFractionDigits: 0,
+            });
+          }
+          if (decimalDigits != null) {
+            return `${integerDisplay}.${decimalDigits}`;
+          } else {
+            return integerDisplay;
+          }
+        }
+        updateDisplay() {
+          this.currentTextElement.innerText = this.getDisplayNumber(
+            this.currentOperand
+          );
+          if (this.operation != null) {
+            this.previousTextElement.innerText = `${this.getDisplayNumber(
+              this.previousOperand
+            )} ${this.operation}`;
+          } else {
+            this.previousTextElement.innerText = "";
+          }
+        }
+      }
+      // Getting values on the user input
+      const numberButtons = document.querySelectorAll("[data-number]");
+      const operationButtons = document.querySelectorAll("[data-operation]");
+      const equalsButton = document.querySelector("[data-equals]");
+      const deleteButton = document.querySelector("[data-delete]");
+      const clearButton = document.querySelector("[data-clear]");
+      const previousTextElement = document.querySelector("[data-previous]");
+      const currentTextElement = document.querySelector("[data-current]");
+
+      const calculator = new Calculator(
+        previousTextElement,
+        currentTextElement
+      );
+
+      numberButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          calculator.appendNumber(button.innerText);
+          calculator.updateDisplay();
+        });
+      });
+
+      operationButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          calculator.selectOperand(button.innerText);
+          calculator.updateDisplay();
+        });
+      });
+
+      equalsButton.addEventListener("click", (button) => {
+        calculator.compute();
+        calculator.updateDisplay();
+      });
+
+      clearButton.addEventListener("click", (button) => {
+        calculator.clear();
+        calculator.updateDisplay();
+      });
+
+      deleteButton.addEventListener("click", (button) => {
+        calculator.delete();
+        calculator.updateDisplay();
+      });
+    </script>
+  </body>
+</html>
